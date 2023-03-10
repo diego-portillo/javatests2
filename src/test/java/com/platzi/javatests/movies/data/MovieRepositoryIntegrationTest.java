@@ -35,9 +35,9 @@ public class MovieRepositoryIntegrationTest {
         Collection<Movie> movies = movieRepository.findAll();
 
         assertThat( movies, is(Arrays.asList(
-                new Movie(1, "Dark Knight", 152, Genre.ACTION),
-                new Movie(2, "Memento", 113, Genre.THRILLER),
-                new Movie(3, "Matrix", 136, Genre.ACTION)
+                new Movie(1, "Dark Knight", 152, Genre.ACTION, "N"),
+                new Movie(2, "Memento", 113, Genre.THRILLER, "N"),
+                new Movie(3, "Matrix", 136, Genre.ACTION, "c")
         )) );
     }
 }
