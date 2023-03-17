@@ -41,9 +41,8 @@ public class MovieServiceShould {
 
     @Test
     public void return_movies_by_genre() {
-
         Collection<Movie> movies = movieService.findMoviesByGenre(Genre.COMEDY);
-        assertThat(getMovieIds(movies), CoreMatchers.is(Arrays.asList(3, 6)) );
+        assertThat(getMovieIds(movies), CoreMatchers.is(Arrays.asList(3, 6)));
     }
 
     @Test
@@ -65,6 +64,26 @@ public class MovieServiceShould {
     @Test
     public void return_movies_by_length_and_genre(){
         assertThat(getMovieIds(movieService.findMoviesByTemplate(new Movie(null, 150, Genre.ACTION, null))), CoreMatchers.is(Arrays.asList(7)));
+    }
+    @Test
+    public void return_movies_by_name_and_length(){
+        assertThat(getMovieIds(movieService.findMoviesByTemplate(new Movie("M", 112, null, null))), CoreMatchers.is(Arrays.asList(5,6)));
+    }
+    @Test
+    public void return_movies_by_name_genre_and_length(){
+        assertThat(getMovieIds(movieService.findMoviesByTemplate(new Movie("M", 112, Genre.HORROR, null))), CoreMatchers.is(Arrays.asList(5)));
+    }
+    @Test
+    public void return_movies_by_director_with_template(){
+        assertThat(getMovieIds(movieService.findMoviesByTemplate(new Movie(null, null, null, "nol"))), CoreMatchers.is(Arrays.asList(1,2)));
+    }
+    @Test
+    public void return_movies_by_id_with_template(){
+        assertThat(getMovieIds(movieService.findMoviesByTemplate(new Movie(1,"z", null, null, "nol"))), CoreMatchers.is(Arrays.asList(1)));
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void return_illegal_argument_exception_if_minutes_are_negative(){
+        movieService.findMoviesByTemplate(new Movie(1,"z", -11, null, "nol"));
     }
     private List<Integer> getMovieIds(Collection<Movie> movies) {
         return movies.stream().map(Movie::getId).collect(Collectors.toList());

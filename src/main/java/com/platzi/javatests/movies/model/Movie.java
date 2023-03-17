@@ -10,7 +10,7 @@ public class Movie {
     private Genre genre;
     private String director;
 
-    public Movie(String name, int minutes, Genre genre, String director) {
+    public Movie(String name, Integer minutes, Genre genre, String director) {
         this(null, name, minutes, genre, director);
     }
 

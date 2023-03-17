@@ -7,7 +7,9 @@ import org.jcp.xml.dsig.internal.dom.Utils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MovieService {
 
@@ -36,14 +38,29 @@ public class MovieService {
         return movieRepository.findAll().stream()
                 .filter(movie -> movie.getDirector().toLowerCase().contains(director.toLowerCase())).collect(Collectors.toList());
     }
-    public Collection<Movie> findMoviesByTemplate(Movie template){
-        //Continuar desde aca
-        boolean[] filters = {};
-        if (template.getDirector()!=null){
-            Utils.arrayConcat(filters);
+    public Collection<Movie> findMoviesByTemplate(Movie template) {
+
+        Stream<Movie> movies = movieRepository.findAll().stream();
+        if (template.getMinutes() < 0){
+            throw new IllegalArgumentException();
         }
-        return movieRepository.findAll().stream()
-                .filter(movie -> movie.getMinutes()!=null);
-        return null;
+        else if(template.getId() != null){
+            return movies.filter(movie -> Objects.equals(movie.getId(), template.getId())).collect(Collectors.toList());
+        }
+        else {
+            if (template.getDirector() != null) {
+                movies = movies.filter(movie -> movie.getDirector().toLowerCase().contains(template.getDirector().toLowerCase()));
+            }
+            if (template.getMinutes() != null) {
+                movies = movies.filter(movie -> movie.getMinutes() <= template.getMinutes());
+            }
+            if (template.getName() != null) {
+                movies = movies.filter(movie -> movie.getName().toLowerCase().contains(template.getName().toLowerCase()));
+            }
+            if (template.getGenre() != null) {
+                movies = movies.filter(movie -> movie.getGenre().equals(template.getGenre()));
+            }
+            return movies.collect(Collectors.toList());
+        }
     }
 }
